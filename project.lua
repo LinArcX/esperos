@@ -9,7 +9,7 @@ local event = require("nui.utils.autocmd").event
 local items
 local has_error = false
 
-local app_name = "image_resizer"
+local app_name = "esperos"
 local project_file = "project.txt"
 
 local debug="debug"
@@ -162,30 +162,12 @@ end
 function project.build()
   notif_done = "Build"
   notif_in_progress = "Building..."
-
-  local cmd_cmake = nil
-  local cmd_cd = "cd output/cmake"
-
-  if items[1] == arch_type_x86 then
-    if items[2] == debug then
-      cmd_cmake = string.format("%s; cmake %s -DCMAKE_BUILD_TYPE=%s ../..", cmd_cd, "-DCMAKE_CXX_FLAGS=-m32", "DEBUG")
-    elseif items[2] == release then
-      cmd_cmake = string.format("%s; cmake %s -DCMAKE_BUILD_TYPE=%s ../..", cmd_cd, "-DCMAKE_CXX_FLAGS=-m32", "RELEASE")
-    end
-  elseif items[1] == arch_type_x64 then
-    if items[2] == debug then
-      cmd_cmake = string.format("%s; cmake %s -DCMAKE_BUILD_TYPE=%s ../..", cmd_cd, "", "DEBUG")
-    elseif items[2] == release then
-      cmd_cmake = string.format("%s; cmake %s -DCMAKE_BUILD_TYPE=%s ../..", cmd_cd, "", "RELEASE")
-    end
-  end
-
   vim.cmd(string.format(":lua require('project').async_task(\"%s\")",
-          string.format("%s; %s; %s; %s", "rm -rf compile_commands.json", cmd_cmake, "make -j8", "cd ../..; ln -s output/cmake/compile_commands.json .")))
+          string.format("make")))
 end
 
 function project.run()
-  vim.cmd(string.format(":call HTerminal(0.4, 200, \"./output/%s/%s/%s\")", items[1], items[2], app_name))
+  vim.cmd(string.format(":call HTerminal(0.4, 200, \"make run\")"))
 end
 
 function project.clean()
@@ -193,7 +175,7 @@ function project.clean()
   notif_in_progress = "Cleaning..."
 
   vim.cmd(string.format(":silent; lua require('project').async_task(\"%s\")",
-    string.format("rm -rf ./output/cmake/* compile_commands.json ./output/%s/%s/*;", items[1], items[2])))
+    string.format("make clean_all", items[1], items[2])))
 end
 
 items = require("user.util.file").read_file_and_return_lines_as_table(project_file);

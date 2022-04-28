@@ -15,12 +15,14 @@ A simple operating system from scratch.
 git clone https://github.com/LinArcX/esperos
 cd esperos
 mkdir -p output
-make esperos.iso
+make
 ```
 
-And finally run the os in VirtualBox:
-
+# Run esperos in virtualbox
 `make run`
+
+# Clean output directory
+`make clean_all`
 
 ## License
 ![License](https://img.shields.io/github/license/LinArcX/esperos.svg)
