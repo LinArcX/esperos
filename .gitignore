@@ -1,0 +1,4 @@
+.cache/*
+output/*
+garbage/*
+compile_commands.json
